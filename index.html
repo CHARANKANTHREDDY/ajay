@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Happy Birthday!</title>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday, Ajay!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <style>
     body {
       margin: 0;
@@ -47,27 +50,21 @@
       100% { background-position: 100% 50%; }
     }
 
-    .gallery {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin: 20px;
+    /* Swiper */
+    .swiper-container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 10px;
     }
 
-    .gallery img {
-      max-width: 300px;
+    .swiper-slide img {
+      width: 100%;
       border-radius: 20px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .gallery img:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-    }
-
-    /* Confetti Effect */
+    /* Confetti */
     .confetti {
       position: fixed;
       width: 10px;
@@ -81,27 +78,7 @@
       100% { transform: translateY(100vh) rotate(360deg); }
     }
 
-    /* Music Button */
-    #music-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      background: #ff69b4;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: transform 0.2s;
-    }
-
-    #music-btn:hover {
-      transform: scale(1.1);
-    }
-
-    /* Vibrant Countdown Timer Style */
+    /* Countdown */
     #countdown {
       font-size: 2.5em;
       margin-top: 20px;
@@ -121,23 +98,46 @@
       50% { transform: scale(1.03); }
       100% { transform: scale(1); }
     }
+
+    #music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: #ff69b4;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+    }
+
+    #music-btn:hover {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
-  <h1>🎉 Happy Birthday, Ajay ! 🎂</h1>
-  <p>Wishing you lots of love and joy on your special day!</p>
+  <h1>🎉 Happy Birthday, Ajay! 🎂</h1>
+  <p>Wishing you a day full of laughter, love, and cake!</p>
 
-  <div class="gallery">
-    <img src="image1.jpg" alt="Birthday Pic 1" />
-    <img src="image2.jpg" alt="Birthday Pic 2" />
-    <img src="image3.jpg" alt="Birthday Pic 3" />
-    <img src="image4.jpg" alt="Birthday Pic 4" />
-    <img src="image5.jpg" alt="Birthday Pic 5" />
+  <!-- Swiper Carousel -->
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide"><img src="image1.jpg" alt="Pic 1"></div>
+      <div class="swiper-slide"><img src="image2.jpg" alt="Pic 2"></div>
+      <div class="swiper-slide"><img src="image3.jpg" alt="Pic 3"></div>
+      <div class="swiper-slide"><img src="image4.jpg" alt="Pic 4"></div>
+      <div class="swiper-slide"><img src="image5.jpg" alt="Pic 5"></div>
+    </div>
   </div>
 
+  <!-- Countdown Timer -->
   <div id="countdown">Loading countdown...</div>
 
-  <!-- Background Music -->
+  <!-- Audio -->
   <audio id="bg-music" loop autoplay>
     <source src="birthday-song.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
@@ -147,8 +147,7 @@
 
   <!-- Confetti -->
   <script>
-    // Generate confetti
-    for(let i=0; i<50; i++) {
+    for (let i = 0; i < 50; i++) {
       let confetti = document.createElement("div");
       confetti.classList.add("confetti");
       confetti.style.left = Math.random() * 100 + "vw";
@@ -157,23 +156,16 @@
       document.body.appendChild(confetti);
     }
 
-    // Music toggle
+    // Music Toggle
     const music = document.getElementById("bg-music");
     const btn = document.getElementById("music-btn");
     btn.addEventListener("click", () => {
-      if (music.muted) {
-        music.muted = false;
-        btn.textContent = "🔊 Mute";
-      } else {
-        music.muted = true;
-        btn.textContent = "🔇 Unmute";
-      }
+      music.muted = !music.muted;
+      btn.textContent = music.muted ? "🔇 Unmute" : "🔊 Mute";
     });
 
-    // Countdown Timer
+    // Countdown
     const countdownElement = document.getElementById("countdown");
-
-    // 🎯 Set your birthday date here
     const targetDate = new Date("2025-09-07T00:00:00");
 
     function updateCountdown() {
@@ -183,17 +175,59 @@
       if (timeDifference <= 0) {
         countdownElement.innerHTML = "🎉 It's Your Birthday! 🎂";
         clearInterval(countdownInterval);
+        launchFireworks();
+        speakGreeting();
       } else {
         const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
         const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
         countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
       }
     }
 
     const countdownInterval = setInterval(updateCountdown, 1000);
+
+    // Text-to-Speech
+    function speakGreeting() {
+      const message = new SpeechSynthesisUtterance("Happy Birthday Ajay! Wishing you a day filled with joy and magic!");
+      message.rate = 1;
+      message.pitch = 1.5;
+      speechSynthesis.speak(message);
+    }
+
+    // Fireworks
+    function launchFireworks() {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/fireworks-js@2.1.0/dist/fireworks.js";
+      script.onload = () => {
+        const container = document.body;
+        const fireworks = new Fireworks(container, {
+          rocketsPoint: { min: 0, max: 100 },
+          opacity: 0.6,
+          acceleration: 1.05,
+          friction: 0.97,
+          gravity: 1.5,
+          particles: 80,
+          traceLength: 3,
+          traceSpeed: 5,
+        });
+        fireworks.start();
+      };
+      document.body.appendChild(script);
+    }
+  </script>
+
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+    new Swiper('.swiper-container', {
+      loop: true,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+    });
   </script>
 </body>
 </html>
